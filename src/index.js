@@ -1,6 +1,7 @@
 /* @flow */
 
 import Rx from 'rx';
+import React from 'react';
 import Cycle from '@cycle/core';
 
 import {makeReactDriver} from './drivers/react';
@@ -8,7 +9,7 @@ import {makeKeyboardDriver} from './drivers/keyboard'
 
 import {intent} from './intent';
 import {model} from './model';
-import {view, childContextTypes, getChildContext, source} from './view';
+import {view} from './view';
 
 function main(drivers) {
   const actions$ = intent(drivers);
@@ -20,9 +21,23 @@ function main(drivers) {
   };
 }
 
-let drivers: {
-  keyboard: () => KeyboardSource
-} = {
+const boardClear$ = new Rx.Subject();
+
+const childContextTypes = {
+  boardClear$: React.PropTypes.any
+};
+
+function getChildContext(): any {
+  return {
+    boardClear$
+  };
+};
+
+const source = {
+  boardClear$
+};
+
+let drivers = {
   keyboard: makeKeyboardDriver(),
   react: makeReactDriver('app', childContextTypes, getChildContext, source)
 };
