@@ -8,7 +8,7 @@ import {makeKeyboardDriver} from './drivers/keyboard'
 
 import {intent} from './intent';
 import {model} from './model';
-import {view} from './view';
+import {view, childContextTypes, getChildContext, source} from './view';
 
 function main(drivers) {
   const actions$ = intent(drivers);
@@ -24,7 +24,7 @@ let drivers: {
   keyboard: () => KeyboardSource
 } = {
   keyboard: makeKeyboardDriver(),
-  react: makeReactDriver('app')
+  react: makeReactDriver('app', childContextTypes, getChildContext, source)
 };
 
 Cycle.run(main, drivers);
